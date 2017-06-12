@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Container from '../component/store/Container';
-import { Router, Route, hashHistory } from 'react-router';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
 require('antd/dist/antd.min.css');
 
@@ -13,9 +17,9 @@ document.body.appendChild(app);
 
 
 ReactDOM.render(
-	/*(<Router history={hashHistory}>
-		<Route path="/" compontent={Container}/>
-	</Router>),*/
-	<Container/>,
+	(<Router>
+	  <Route path='/' component={ Container }>
+	  </Route>
+	</Router>),
     app
 );

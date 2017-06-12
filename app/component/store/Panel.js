@@ -1,11 +1,20 @@
 import React, {Component} from 'react';
 import {Input} from 'antd';
+import Category from './Category';
+import {
+  NavLink
+} from 'react-router-dom'
 
 export default class Panel extends Component {
     
     constructor(props) {
         super(props);
+		this.state = {active: "extensions"};
     }
+	
+	setActive = name => {
+		this.setState({active: name});
+	}
 
     render () {
         return (
@@ -21,7 +30,22 @@ export default class Panel extends Component {
             	<div style={{marginTop: 10}}>
             		<Input placeholder="搜索应用" style={{height: 35, fontSize: 16}} />
             	</div>
+				
+				<Category name="扩展程序" to="/extensions" active={this.state.active === 'extensions'}></Category>
+
+				<Category name="主题背景" to="/themes" active={this.state.active === 'themes'}></Category>
+
+				<Category name="应用" to="/apps" active={this.state.active === 'apps'}></Category>
+
+				<Category name="游戏" to="/games" active={this.state.active === 'games'}></Category>
+
+
+				
             </div>
         )
     }
 }
+
+const styles = {
+	
+};

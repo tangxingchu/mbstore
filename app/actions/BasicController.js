@@ -6,7 +6,7 @@ module.exports = (app) => {
 
 	app.use('/public', express.static(ROOT_PATH + '/public'));
 
-	app.get('/', function (req, res) {
+	app.get('*', function (req, res) {
 	  	res.sendFile(path.resolve(__dirname, '../views/store.html'));
 	});
 

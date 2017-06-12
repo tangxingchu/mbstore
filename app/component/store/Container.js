@@ -17,7 +17,9 @@ export default class Container extends Component {
                         <Col span={6}>
                             <Panel></Panel>
                         </Col>
-                        <Col span={18}></Col>
+                        <Col span={18}>
+							
+						</Col>
                     </Row>
                 </Col>
                 <Col span={4}></Col>
