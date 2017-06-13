@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Button} from 'antd';
-import { connect } from 
+import { connect } from 'react-redux';
 
-export default class Myapp extends Component {
+class Myapp extends Component {
 	
 	constructor() {
 		super();
@@ -10,10 +10,10 @@ export default class Myapp extends Component {
 	}
 
 	render() {
-		let {url} = this.props;
+		let {url, test} = this.props;
 		return(
 			<div>
-				<div style={styles.title}><span style={styles.myapp}>我的应用</span><Button type='primary' onClick={() => {}}>添加新应用</Button></div>
+				<div style={styles.title}><span style={styles.myapp}>我的应用</span><Button type='primary' onClick={() => {}}>添加新应用</Button>{test.name}</div>
 				<div>2</div>
 			    <div>2</div>
 			    <div>2</div>
@@ -37,3 +37,11 @@ const styles = {
 		marginRight:'10px',
 	}
 }
+
+export default connect((state) => {
+	return {
+		test: state.test,
+	}
+}, (dispatch) => {
+	return {}
+})(Myapp);
