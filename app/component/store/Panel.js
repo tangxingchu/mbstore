@@ -82,7 +82,7 @@ class Panel extends Component {
 				}}/>
 
 		{this.props.condition ? (
-					<Route render={() => {
+					<Route render={({location}) => {
 						return (
 						<div>
 							<div style={styles.hr}>
@@ -90,7 +90,7 @@ class Panel extends Component {
 							</div>
 
 							<div style={styles.condition}>
-								<label style={styles.text}>发布时间</label>{this.state.raValue ? <span style={styles.unselected} onClick={()=>{this.setState({raValue: 0})}}>全部不选</span> : ""}
+								<label style={styles.text}>发布时间</label>{this.state.raValue ? <span style={styles.unselected} onClick={()=>{this.setState({raValue: 0})}}><Link to={`${url}`} style={[styles.link,styles.text]}>全部不选</Link></span> : ""}
 							</div>
 							<div style={styles.radios}>
 								<Link to={`${url}?_pd=1d`} style={styles.link}><label style={this.state.raValue === '1d' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('1d')}}>一天内</label></Link><br/>

@@ -187,16 +187,16 @@ class NewVersionInfo extends Component {
 						  label="版本号"
 						>{getFieldDecorator('version', {
 							rules: [
-							  { required: true, pattern: /\d+(\.\d+){0,2}/, message: '请输入正确的版本号,比如:1.0.1' },
+							  { required: true, pattern: /^\d+((\.\d+)+$){1,2}/, message: '请输入正确的版本号,比如:1.0.1' },
 							],
 						  })(
-						  <Input placeholder="版本号" />)}
+						  <Input placeholder="版本号" maxLength='10'/>)}
 						</FormItem>
 						<FormItem
 						  {...formItemLayout}
 						  label="描述"
 						>{getFieldDecorator('desc')(
-						  <Input type="textarea" rows={4} />)}
+						  <Input type="textarea" rows={4} maxLength='100'/>)}
 						</FormItem>
 						<FormItem
 						  wrapperCol={{ span: 8, offset: 2 }}
