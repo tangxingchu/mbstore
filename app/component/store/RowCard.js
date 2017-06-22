@@ -20,7 +20,7 @@ export default class RowCard extends Component {
 
 	render() {
 		return (
-			<Col span={6}>
+			<Col span={6} style={{padding: 5}}>
 				<Card style={{ width: '100%',cursor:'pointer' }} bodyStyle={{ padding: 0 }} onClick={()=>{this.showDetailModal(this.props.data.appId)}}>
 					<div style={{textAlign:'center'}}>
 					  <img width="100%" height="200px" src={this.props.data.icon_200 ? `/public/files${this.props.data.icon_200}` : '/public/image/default-icon.png'} />
