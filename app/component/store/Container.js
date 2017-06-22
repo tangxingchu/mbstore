@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Row, Col} from 'antd';
 import Panel from './Panel';
 import Header from './Header';
-import Content from './Content';
 import Extensions from './Extensions';
 import Login from './Login';
 import Myapp from './Myapp';
@@ -15,7 +14,8 @@ import reducers from '../../reducers';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  Redirect
 } from 'react-router-dom'
 
 const logger = createLogger();
@@ -32,54 +32,31 @@ export default class Container extends Component {
 		<Provider store={store}>
 			<Router>
 				<Row>
-					<Col span={4}></Col>
-					<Col span={16}>
+					<Col span={2}></Col>
+					<Col span={20}>
 						<Row>
 							<Col span={6}>
-								<Panel>
-								</Panel>
+								<Route path="/:id" render={({match, location}) => {
+									if(match.url.indexOf('/extensions') > -1 || match.url.indexOf('/themes') > -1) {
+										return (<Panel match={match} location={location} condition></Panel>);
+									} else {
+										return (<Panel match={match} location={location}></Panel>);
+									}
+								}}/>
 							</Col>
 							<Col span={18}>
-								<Header></Header>
-							  <Route exact path='/' component={ Extensions }>
-							  </Route>
-			                  <Route path='/themes' component={ Themes }>
-							  </Route>
-			                  <Route path='/apps' component={ Apps }>
-							  </Route>
-			                  <Route path='/games' component={ Games }>
-							  </Route>
-							  <Route path='/login' component={ Login }>
-							  </Route>
-							  <Route path='/myapps' component={ MyappFunc }></Route>
+							  <Route path="/:id" component={Header}/>
+							  <Route path='/extensions' render={() => <Extensions type={1}/>}></Route>
+			                  <Route path='/themes' render={() => <Extensions type={2}/>}></Route>
+							  <Route path='/login' component={ Login }></Route>
+							  <Route path='/myapps' component={ Myapp }></Route>
 							</Col>
 						</Row>
 					</Col>
-					<Col span={4}></Col>
+					<Col span={2}></Col>
 				</Row>
 			</Router>
 		</Provider>
         )
     }
 }
-
-
-const MyappFunc = ({match}) => (
-	<Myapp url={match.url} />
-)
-
-const Themes = ({match}) => (
-  <div>
-    <h2>{match.url}</h2>
-  </div>
-)
-const Apps = () => (
-  <div>
-    <h2>Apps</h2>
-  </div>
-)
-const Games = () => (
-  <div>
-    <h2>Games</h2>
-  </div>
-)

@@ -1,161 +1,49 @@
 import React, {Component} from 'react';
 import StoreCarousel from './StoreCarousel';
-import { Card } from 'antd';
-import {Row, Col} from 'antd';
+import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {Row, Col, Card, Spin} from 'antd';
+import RowCard from './RowCard'
+import {
+  Route,
+  Link
+} from 'react-router-dom'
 
-export default class Extensions extends Component {
+import extActions from '../../actions/store';
+import appInfoActions from '../../actions/appInfo';
+
+class Extensions extends Component {
 	
-	constructor() {
-		super();
+	constructor(props) {
+        super(props);
+	}
+
+	componentDidMount() {
+		this.props.extActions.getAppList(this.props.type).catch(erro => {console.log(erro)});
+	}
+
+	_renderItem = () => {
+		return this.props.data.map((item, index) => <RowCard data={item} key={index} appInfoActions={this.props.appInfoActions}/>)
 	}
 
 	render() {
 		return(
 			<div>
+				
+				
+				
 				<div style={styles.carousel}>
 					<StoreCarousel/>					
 				</div>
-
-				<div style={styles.title}>应用列表</div>
+				
+				<div style={styles.title}>{this.props.type === 1 ? '企业类' : '普通用户类'}应用列表({this.props.data.length})&nbsp;&nbsp;{this.props.loading ? <Spin size='large'/> : ''}</div>
+				
 				<div style={styles.card}>
-				<Row style={{padding: '5px'}}>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-				</Row>
-				<Row style={{padding: '5px'}}>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-				</Row>
+				{this.props.data.length > 0 ?
 					<Row style={{padding: '5px'}}>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-					<Col span={6}>
-						<Card style={{ width: '100%' }} bodyStyle={{ padding: 0 }}>
-							<div className="custom-image">
-							  <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-							</div>
-							<div className="custom-card">
-							  <h3>Europe Street beat</h3>
-							  <p>www.instagram.com</p>
-							</div>
-						  </Card>
-					</Col>
-				</Row>
+						{this._renderItem()}
+					</Row> : ''
+				}
 				</div>
 			</div>
 		)
@@ -171,6 +59,10 @@ const styles = {
 		borderLeft: '1px solid #bdbdbd',
 		borderRight: '1px solid #bdbdbd',
 		borderBottom: '1px solid #bdbdbd',
+		textAlign: 'center',
+		lineHeight: '320px',
+		color: '#fff',
+		overflow: 'hidden',
 	},
 	title: {
 		fontSize: '20px',
@@ -186,3 +78,16 @@ const styles = {
 		borderTop: 'none',
 	}
 }
+
+
+export default connect((state) => {
+	return {
+		loading: state.extensions.loading,
+		data: state.extensions.data,
+	}
+}, (dispatch) => {
+	return {
+		extActions: bindActionCreators(extActions, dispatch),
+	    appInfoActions: bindActionCreators(appInfoActions, dispatch),
+	}
+})(Extensions);

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Container from '../component/store/Container';
 
 require('antd/dist/antd.min.css');
+require('../store.css');
 
 var app;
 

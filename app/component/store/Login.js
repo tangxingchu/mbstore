@@ -1,31 +1,46 @@
 import React, {Component} from 'react';
 import {Row, Col, Form, Icon, Input, Button, Checkbox } from 'antd';
-
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import loginActions from '../../actions/login';
+import {Redirect} from 'react-router-dom';
 
 const FormItem = Form.Item;
 
 class Login extends Component {
 	
-	constructor() {
-		super();
+	constructor(props) {
+        super(props);
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 		  if (!err) {
-			console.log('Received values of form: ', values);
+			this.props.loginActions.login(values.userName, values.password).catch(err => {console.log(err)});
 		  }
 		});
 	}
 
+	componentWillMount() {
+		let token = window.localStorage.getItem('token');
+		if(token) this.props.loginActions.loginByToken(token);
+	}
+
 	render() {
+		if(this.props.login.isLogin) {
+			return (<Redirect to="/extensions"/>);
+		}
 		const { getFieldDecorator } = this.props.form;
 		return (
 		 <Row>
 		  <Col span={8}></Col>
 		  <Col span={8}>
 		  <Form onSubmit={this.handleSubmit} style={styles.form}>
+		{!this.props.login.loginstatus ? 
+			<FormItem>
+			  <label style={{color:'red'}}>{this.props.login.data.token}</label>
+			</FormItem> : ""}
 			<FormItem>
 			  {getFieldDecorator('userName', {
 				rules: [{ required: true, message: '请输入用户名!' }],
@@ -47,11 +62,10 @@ class Login extends Component {
 			  })(
 				<Checkbox>记住我</Checkbox>
 			  )}
-			  <a style={styles.forgot} href="">忘记密码</a>
+			  
 			  <Button type="primary" htmlType="submit" style={styles.loginBtn}>
 				登录
 			  </Button>
-			  <a href="">马上注册!</a>
 			</FormItem>
 		  </Form>
 				 </Col>
@@ -64,11 +78,21 @@ class Login extends Component {
 
 const WrappedNormalLoginForm = Form.create()(Login);
 
-export default WrappedNormalLoginForm;
+export default connect((state) => {
+	return {
+		login: state.login,
+	}
+}, (dispatch) => {
+	return {
+		loginActions: bindActionCreators(loginActions, dispatch),
+	}
+})(WrappedNormalLoginForm)
+
+
 
 const styles = {
 	form: {
-		fontSize: '14px',
+		fontSize: '16px',
 		width: '100%',
 		maxWidth: '320px', 
 		height: '1px',
