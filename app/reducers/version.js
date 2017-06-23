@@ -20,11 +20,11 @@ export default (state = initState, action) => {
 				data: action.data,
 			});
 			break;
-		case 'QUERY_PENDING':
+		case 'QUERYVERSION_PENDING':
 			state.v_loading[action.data.appId] = true;
 			return Object.assign({}, state);
 			break;
-		case 'QUERY':
+		case 'QUERYVERSION':
 			state.v_data[action.data.appId] = action.data.data;
 			state.v_loading[action.data.appId] = false;
 			return Object.assign({}, state);

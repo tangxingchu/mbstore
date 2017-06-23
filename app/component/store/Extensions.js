@@ -23,7 +23,7 @@ class Extensions extends Component {
 	}
 
 	_renderItem = () => {
-		return this.props.data.map((item, index) => <RowCard data={item} key={index} appInfoActions={this.props.appInfoActions}/>)
+		return this.props.extensions.data.map((item, index) => <RowCard data={item} key={index} appInfoActions={this.props.appInfoActions}/>)
 	}
 
 	render() {
@@ -36,10 +36,10 @@ class Extensions extends Component {
 					<StoreCarousel/>					
 				</div>
 				
-				<div style={styles.title}>{this.props.type === 1 ? '企业类' : '普通用户类'}应用列表({this.props.data.length})&nbsp;&nbsp;{this.props.loading ? <Spin size='large'/> : ''}</div>
+				<div style={styles.title}>{this.props.type === 1 ? '企业类' : '普通用户类'}应用列表({this.props.extensions.data.length})&nbsp;&nbsp;{this.props.extensions.loading || this.props.appInfo.q_loading ? <Spin size='large'/> : ''}</div>
 				
 				<div style={styles.card}>
-				{this.props.data.length > 0 ?
+				{this.props.extensions.data.length > 0 ?
 					<Row style={{padding: '5px'}}>
 						{this._renderItem()}
 					</Row> : ''
@@ -82,8 +82,8 @@ const styles = {
 
 export default connect((state) => {
 	return {
-		loading: state.extensions.loading,
-		data: state.extensions.data,
+		extensions: state.extensions,
+		appInfo: state.appInfo,
 	}
 }, (dispatch) => {
 	return {

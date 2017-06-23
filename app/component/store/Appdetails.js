@@ -48,17 +48,19 @@ class AppDetails extends Component {
 									<div><img src={this.props.appInfo.data.icon_200 ? `/public/files${this.props.appInfo.data.icon_200}` : '/public/image/default-icon.png'} style={{width:'200px',height:'200px'}}/>200*200图标</div>
 								</div>
 								<div style={{float:'left'}}>
-									<div><div style={{fontWeight:'bold'}}>ID:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appId}</div></div>					
+									<div><div style={{fontWeight:'bold'}}>ID:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.app_id}</div></div>					
 									<div><div style={{fontWeight:'bold'}}>类型:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.type === 1 ? '企业类' : '普通用户类'}</div></div>
-									<div><div style={{fontWeight:'bold'}}>英文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appnameEn}</div></div>
-					                <div><div style={{fontWeight:'bold'}}>中文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appnameCn}</div></div>
-					                <div><div style={{fontWeight:'bold'}}>创建时间:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.createTime}</div></div>
+									<div><div style={{fontWeight:'bold'}}>英文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appname_en}</div></div>
+					                <div><div style={{fontWeight:'bold'}}>中文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appname_cn}</div></div>
+					                <div><div style={{fontWeight:'bold'}}>创建时间:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.create_time}</div></div>
 								</div>
 							</div>
-							<div style={{clear:'both', marginTop: '20px'}}><span style={{fontWeight:'bold'}}>描述:</span>{this.props.appInfo.data.desc}</div>
+							<div style={{clear:'both', marginTop: '20px'}}><span style={{fontWeight:'bold'}}>描述:</span>{this.props.appInfo.data.a_desc}</div>
 							</div>
 						</TabPane>
-						<TabPane tab="二维码" key="2">.</TabPane>
+						<TabPane tab="二维码" key="2"><div style={{display:'flex', flex: 1, justifyContext: 'center', alignItems: 'center'}}>
+							<img src={`cmsnet://oams.newone.com.cn/mapp/app/${this.props.appInfo.data.app_id}@${this.props.appInfo.data.version_no}/app/${this.props.appInfo.data.app_id}.App`}/></div>
+						</TabPane>
 					</Tabs>
 
 				</Modal>
@@ -74,9 +76,5 @@ const styles = {
 export default connect((state) => {
 	return {
 		appInfo: state.appInfo,
-	}
-}, (dispatch) => {
-	return {
-		appInfoActions: bindActionCreators(appInfoActions, dispatch),
 	}
 })(AppDetails);

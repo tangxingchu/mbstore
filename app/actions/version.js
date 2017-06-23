@@ -16,17 +16,17 @@ const createVersion = (versionInfo) => {
 
 const queryVersions = (token, appId) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'QUERY_PENDING', data: {'appId': appId}});
+		dispatch({type: 'QUERYVERSION_PENDING', data: {'appId': appId}});
 		if(getState().version.v_data[appId]) {
 			return dispatch({
-				type: 'QUERY',
+				type: 'QUERYVERSION',
 				data: {'appId': appId, 'data' : getState().version.v_data[appId]},
 			});
 		} else {
 			var channel = new Channel();
 			return channel.queryVersion(token, appId).then(data =>
 				dispatch({
-					type: 'QUERY',
+					type: 'QUERYVERSION',
 					data: {'appId' : appId, 'data': data},
 				})
 			)

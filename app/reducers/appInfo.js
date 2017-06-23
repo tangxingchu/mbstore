@@ -17,12 +17,17 @@ export default (state = initState, action) => {
 			});
 			break;
 		case 'UPDATEAPPINFO':
-			let idx = state.q_data.findIndex(d => d.appId === action.data.appId);
+			let idx = state.q_data.findIndex(d => d.app_id === action.data.app_id);
 			state.q_data.splice(idx, 1, action.data);
 			return Object.assign({}, state, {
+				loading: false,
 				data: action.data,
 			});
 			break;
+		case 'UPDATEAPPINFO_PENDING':
+			return Object.assign({}, state, {
+				loading: true,
+			});
 		case 'ADDAPPINFO_PENDING':
 			return Object.assign({}, state, {
 				loading: true,
@@ -44,9 +49,14 @@ export default (state = initState, action) => {
 			return Object.assign({}, state, {
 				q_data: action.data,
 			});
-		case 'QUERY':
+		case 'QUERYAPP_PENDING':
 			return Object.assign({}, state, {
-				data: action.data,
+				q_loading: true,
+			});
+		case 'QUERYAPP':
+			return Object.assign({}, state, {
+				data: action.data[0],
+				q_loading: false,
 			});
 		default: return state; break;
 	}

@@ -49,28 +49,28 @@ class Myapp extends Component {
 			return (<div style={{padding: '10px 0px 10px', fontSize: '14px'}}>{this.props.appInfo.q_data.map((data, index) => {
 				return (<div style={{border:'1px solid #ccc', padding: '10px', marginTop: '4px'}} key={index}>
 					<div style={{float: 'left', marginRight: '4px'}}>
-						<img style={{width:'100px', height:'100px', cursor:'pointer'}} onClick={()=>{this.showDetailModal(data.appId)}} src={data.icon_100 ? '/public/files' + data.icon_100 : '/public/image/default-icon.png'} />
+						<img style={{width:'100px', height:'100px', cursor:'pointer'}} onClick={()=>{this.showDetailModal(data.app_id)}} src={data.icon_100 ? '/public/files' + data.icon_100 : '/public/image/default-icon.png'} />
 					</div>
 					<div style={{float: 'left'}}>
 						<div style={{float: 'left', marginRight: '10px'}}>类型: <span style={{fontWeight: 'bold'}}>{data.type === 1 ? '企业类' : '普通用户类'}</span></div>
-						<div style={{float: 'left', marginRight: '10px'}}>英文名称: <span style={{fontWeight: 'bold'}}>{data.appnameEn}</span></div>
-						<div style={{float: 'left', marginRight: '10px'}}>中文名称: <span style={{fontWeight: 'bold'}}>{data.appnameCn}</span></div>
-						<div style={{float: 'left', marginRight: '10px'}}>创建时间: <span>{data.createTime}</span></div>
+						<div style={{float: 'left', marginRight: '10px'}}>英文名称: <span style={{fontWeight: 'bold'}}>{data.appname_en}</span></div>
+						<div style={{float: 'left', marginRight: '10px'}}>中文名称: <span style={{fontWeight: 'bold'}}>{data.appname_cn}</span></div>
+						<div style={{float: 'left', marginRight: '10px'}}>创建时间: <span>{data.create_time}</span></div>
 						<div style={{clear: 'both'}}></div>
-						<div style={{clear: 'both'}}>描述：{data.desc}</div>
+						<div style={{clear: 'both'}}>描述：{data.a_desc}</div>
 					</div>
 					<div style={{float:'right'}}>
-						<div><Button type='primary' style={{width: '100px'}} onClick={() => {this.props.appInfoActions.showCVModal(data.appId)}}>创建新版本</Button></div>
+						<div><Button type='primary' style={{width: '100px'}} onClick={() => {this.props.appInfoActions.showCVModal(data.app_id)}}>创建新版本</Button></div>
 					</div>	
 					<div style={{float:'right', marginRight: '10px'}}>
-						<div><Button type='danger' style={{width: '100px'}} onClick={() => {this.showConfirm((token) => {this.props.appInfoActions.delAppInfoById(token, data.appId)})}}>删除</Button></div>
+						<div><Button type='danger' style={{width: '100px'}} onClick={() => {this.showConfirm((token) => {this.props.appInfoActions.delAppInfoById(token, data.app_id)})}}>删除</Button></div>
 					</div>
 					<div style={{float:'right', marginRight: '10px'}}>
-						<div><Link to={`${url}/modifyapp/${data.appId}`}><Button style={{width: '100px'}}>修改</Button></Link></div>
+						<div><Link to={`${url}/modifyapp/${data.app_id}`}><Button style={{width: '100px'}}>修改</Button></Link></div>
 					</div>
 					<div style={{clear: 'both'}}></div>
-					<VersionInfo versionActions={this.props.versionActions} version={this.props.version} appId={data.appId}/>
-					<WrappedNewVersionInfo appId={data.appId} />
+					<VersionInfo versionActions={this.props.versionActions} version={this.props.version} appId={data.app_id}/>
+					<WrappedNewVersionInfo appId={data.app_id} />
 				</div>)
 			})} </div>);
 		}
@@ -152,7 +152,7 @@ class NewVersionInfo extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				console.log('Received values of form: ', values);
+				//console.log('Received values of form: ', values);
 				let token = window.localStorage.getItem('token');
 				let appId = this.props.appInfo.currAppId;
 				let version = values['version'];
@@ -201,7 +201,7 @@ class NewVersionInfo extends Component {
 						<FormItem
 						  wrapperCol={{ span: 8, offset: 2 }}
 						>
-						  <Button type="primary" htmlType="submit" disabled={this.props.version.loading ? true : false}>{this.props.version.loading ? '保存中...' : '保存'}</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+						  <Button type="primary" htmlType="submit" loading={this.props.version.loading}>保存</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 						  <Button type="default" onClick={() => {this.props.appInfoActions.showCVModal('')}} >关闭</Button>
 						</FormItem>
 					</Form>
@@ -233,7 +233,7 @@ class ModifyForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        //console.log('Received values of form: ', values);
 		let token = window.localStorage.getItem('token');
 		let icon_50 = '', icon_50_path = '', icon_100 = '', icon_100_path = '', icon_200 = '', icon_200_path = '';
 		if(values.upload50 && values.upload50.length > 0) {
@@ -391,7 +391,7 @@ class ModifyForm extends React.Component {
         <FormItem
           wrapperCol={{ span: 12, offset: 6 }}
         >
-          <Button type="primary" htmlType="submit" disabled={this.props.appInfo.loading ? true : false}>{this.props.appInfo.loading ? '保存中...' : '保存'}</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <Button type="primary" htmlType="submit" loading={this.props.appInfo.loading}>保存</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 		  <Link to={`${this.props.url}`}><Button type="default">返回我的应用</Button></Link>
         </FormItem>
       </Form>
@@ -427,11 +427,11 @@ const WrappedForm = connect((state) => {
 		upload200_v = [{uid: -1, name: name, status: 'done', url: '/public/files' + props.appInfo.data.icon_200}];
 	}
     return {
-      appId: {value: props.appInfo.data.appId},
-	  appnameEn: {value: props.appInfo.data.appnameEn},
-	  appnameCn: {value: props.appInfo.data.appnameCn},
+      appId: {value: props.appInfo.data.app_id},
+	  appnameEn: {value: props.appInfo.data.appname_en},
+	  appnameCn: {value: props.appInfo.data.appname_cn},
 	  type: {value: props.appInfo.data.type + ''},
-	  desc: {value: props.appInfo.data.desc},
+	  desc: {value: props.appInfo.data.a_desc},
       upload50: {value: upload50_v},
 	  upload100: {value: upload100_v},
       upload200: {value: upload200_v},
@@ -606,7 +606,7 @@ class AddForm extends React.Component {
         <FormItem
           wrapperCol={{ span: 12, offset: 6 }}
         >
-          <Button type="primary" htmlType="submit" disabled={this.props.appInfo.loading ? true : false}>{this.props.appInfo.loading ? '保存中...' : '保存'}</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <Button type="primary" htmlType="submit" loading={this.props.appInfo.loading}>保存</Button>&nbsp;&nbsp;&nbsp;&nbsp;
 		  <Link to={`${this.props.url}`}><Button type="default">返回我的应用</Button></Link>
         </FormItem>
       </Form>

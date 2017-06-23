@@ -29,7 +29,7 @@ export default class Channel {
 	}
 	
 	updateAppInfo = ({token, appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200}) => {
-		console.log(appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200);
+		//console.log(appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200);
 		return Zqmb.me().token(token).get("/mb/app/update", appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200).then(function(res){
 			return res;
 		});
