@@ -1,13 +1,14 @@
 
 import Channel from '../channel'
+import {Extensions} from '../utils/constants'
 
 const getAppList = (type) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'GETALLLIST_PENDING'});
+		dispatch({type: Extensions.GETALLLIST_PENDING});
 		var channel = new Channel();
-		return channel.getAllList(type).then(function(data){
+		return channel.getAllList(type).then(data => {
 			return dispatch({
-				type: 'GETALLLIST',
+				type: Extensions.GETALLLIST,
 				data: data,
 			});
 		})
@@ -16,9 +17,9 @@ const getAppList = (type) => {
 
 const filter = (v) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'GETALLLIST_PENDING'});
-		let data = getState().extensions.data.filter(item => item.appnameEn.indexOf(v) > -1 || item.appnameCn.indexOf(v) > -1);
-		dispatch({type: 'GETALLLIST', data: data});
+		dispatch({type: Extensions.GETALLLIST_PENDING});
+		let data = getState().extensions.data.filter(item => item.appname_en.indexOf(v) > -1 || item.appname_cn.indexOf(v) > -1);
+		dispatch({type: Extensions.GETALLLIST, data: data});
 	}
 }
 

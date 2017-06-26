@@ -1,32 +1,33 @@
 	
 import Channel from '../channel'
+import {Version} from '../utils/constants'
 
 const createVersion = (versionInfo) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'CREATEVERSION_PENDING'});
+		dispatch({type: Version.CREATEVERSION_PENDING});
 		var channel = new Channel();
 		return channel.createVersion(versionInfo).then(data =>
 			dispatch({
-				type: 'CREATEVERSION',
+				type: Version.CREATEVERSION,
 				data: data,
 			})
-		).catch(err => {alert(err);})
+		).catch(err => console.log(err))
 	}
 }
 
 const queryVersions = (token, appId) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'QUERYVERSION_PENDING', data: {'appId': appId}});
+		dispatch({type: Version.QUERYVERSION_PENDING, data: {'appId': appId}});
 		if(getState().version.v_data[appId]) {
 			return dispatch({
-				type: 'QUERYVERSION',
+				type: Version.QUERYVERSION,
 				data: {'appId': appId, 'data' : getState().version.v_data[appId]},
 			});
 		} else {
 			var channel = new Channel();
 			return channel.queryVersion(token, appId).then(data =>
 				dispatch({
-					type: 'QUERYVERSION',
+					type: Version.QUERYVERSION,
 					data: {'appId' : appId, 'data': data},
 				})
 			)

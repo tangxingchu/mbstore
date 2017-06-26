@@ -1,21 +1,22 @@
 
 import Channel from '../channel'
+import {Login} from '../utils/constants'
 
 const login = (username, password) => {
 	return (dispatch, getState) => {
 		var channel = new Channel();
-		return channel.login(username, password).then(function(data){
+		return channel.login(username, password).then(data => {
 			if(data.success) {
 				window.localStorage.setItem("token", data.token);
 				window.localStorage.setItem("username", username);
 				data = Object.assign({}, data, {username: username});
 				return dispatch({
-					type: 'LOGINSUCESS',
+					type: Login.LOGINSUCESS,
 					data: data,
 				});	
 			} else {
 				return dispatch({
-					type: 'LOGINFAILED',
+					type: Login.LOGINFAILED,
 					data: data,
 				});
 			}
@@ -28,7 +29,7 @@ const logout = () => {
 	return (dispatch, getState) => {
 		window.localStorage.removeItem("token");
 		window.localStorage.removeItem("username");
-		dispatch({type: 'LOGOUT'});
+		dispatch({type: Login.LOGOUT});
 	}
 }
 
@@ -36,7 +37,7 @@ const changeuser = () => {
 	return (dispatch, getState) => {
 		window.localStorage.removeItem("token");
 		window.localStorage.removeItem("username");
-		dispatch({type: 'CHANGEUSER'});
+		dispatch({type: Login.CHANGEUSER});
 	}
 }
 
@@ -44,7 +45,7 @@ const loginByToken = (token) => {
 	return (dispatch, getState) => {
 		let data = Object.assign({}, {}, {username: window.localStorage.getItem("username")});
 		dispatch({
-			type: 'LOGINSUCESS',
+			type: Login.LOGINSUCESS,
 			data: data,
 		});	
 	}

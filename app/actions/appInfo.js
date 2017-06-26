@@ -1,9 +1,10 @@
 
 import Channel from '../channel'
+import {AppInfo} from '../utils/constants'
 
 const addAppInfo = (appInfo) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'ADDAPPINFO_PENDING'});
+		dispatch({type: AppInfo.ADDAPPINFO_PENDING});
 		fetch('/saveImages', {method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
@@ -16,7 +17,7 @@ const addAppInfo = (appInfo) => {
 		if(appInfo.icon_200) appInfo.icon_200 = '/' + appInfo.appnameEn + '/' + appInfo.icon_200;
 		return channel.addAppInfo(appInfo).then(data => {
 			return dispatch({
-				type: 'ADDAPPINFO',
+				type: AppInfo.ADDAPPINFO,
 				data: data,
 			});
 		})
@@ -25,7 +26,7 @@ const addAppInfo = (appInfo) => {
 
 const updateAppInfo = (appInfo) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'UPDATEAPPINFO_PENDING'});
+		dispatch({type: AppInfo.UPDATEAPPINFO_PENDING});
 		fetch('/saveImages', {method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
@@ -40,7 +41,7 @@ const updateAppInfo = (appInfo) => {
 		u_appInfo.a_desc = appInfo.desc;u_appInfo.appname_en = appInfo.appnameEn;u_appInfo.appname_cn = appInfo.appnameCn;u_appInfo.app_id = appInfo.appId;
 		return channel.updateAppInfo(appInfo).then(data => {
 			return dispatch({
-				type: 'UPDATEAPPINFO',
+				type: AppInfo.UPDATEAPPINFO,
 				data: u_appInfo,
 			});
 		})
@@ -51,10 +52,10 @@ const updateAppInfo = (appInfo) => {
 const getAppInfoById = (token, appId) => {
 	return (dispatch, getState) => {
 		var channel = new Channel();
-		dispatch({type: 'QUERYAPP_PENDING'});
+		dispatch({type: AppInfo.QUERYAPP_PENDING});
 		return channel.getAppInfoById(token, appId).then(data => {
 			return dispatch({
-				type: 'QUERYAPP',
+				type: AppInfo.QUERYAPP,
 				data: data,
 			});
 		})
@@ -63,11 +64,11 @@ const getAppInfoById = (token, appId) => {
 
 const getMyAppInfo = (token) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'GETMYAPPINFO_PENDING'});
+		dispatch({type: AppInfo.GETMYAPPINFO_PENDING});
 		var channel = new Channel();
 		return channel.getMyAppInfo(token).then(data => {
 			return dispatch({
-				type: 'GETMYAPPINFO',
+				type: AppInfo.GETMYAPPINFO,
 				data: data,
 			})}
 		);
@@ -81,7 +82,7 @@ const delAppInfoById = (token, appId) => {
 			let q_data = getState().appInfo.q_data;
 			let new_q_data = q_data.filter(v => v.app_id !== appId);
 			return dispatch({
-				type: 'DELETE',
+				type: AppInfo.DELETE,
 				data: new_q_data,
 			});
 		})
@@ -90,13 +91,13 @@ const delAppInfoById = (token, appId) => {
 
 const showCVModal = (appId) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'SHOW_CVModal', data: {appId}});
+		dispatch({type: AppInfo.SHOW_CVModal, data: {appId}});
 	}
 }
 
 const showDetail = (appId) => {
 	return (dispatch, getState) => {
-		dispatch({type: 'SHOW_DETAIL', data: {appId}});
+		dispatch({type: AppInfo.SHOW_DETAIL, data: {appId}});
 	}
 }
 

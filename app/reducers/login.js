@@ -1,4 +1,7 @@
 
+import createReducers from '../utils/createReducers'
+import {Login} from '../utils/constants'
+
 const initState = {
 	isLogin: false,
 	loginstatus: true,
@@ -6,37 +9,39 @@ const initState = {
 	changeuser: false,
 }
 
-export default (state = initState, action) => {
-	switch(action.type) {
-		case 'LOGINSUCESS':
-			return Object.assign({}, state, {
-				loginstatus: true,
-				data: action.data,
-				changeuser: false,
-				isLogin: true,
-			  });
-			break;
-		case 'LOGINFAILED':
-			return Object.assign({}, state, {
-				loginstatus: false,
-				data: action.data,
-				changeuser: false,
-				isLogin: false,
-			  });
-		case 'LOGOUT': 
-			return Object.assign({}, state, {
-				loginstatus: true,
-				data: action.data,
-				changeuser: false,
-				isLogin: false,
-			  });
-		case 'CHANGEUSER': 
-			return Object.assign({}, state, {
-				loginstatus: true,
-				data: action.data,
-				changeuser: true,
-				isLogin: false,
-			  });
-		default: return state; break;
-	}
+const loginHandler = {
+	[Login.LOGINSUCESS]: (state, action) => {
+		return Object.assign({}, state, {
+			loginstatus: true,
+			data: action.data,
+			changeuser: false,
+			isLogin: true,
+		});
+	},
+	[Login.LOGINFAILED]: (state, action) => {
+		return Object.assign({}, state, {
+			loginstatus: false,
+			data: action.data,
+			changeuser: false,
+			isLogin: false,
+		});
+	},
+	[Login.LOGOUT]: (state, action) => {
+		return Object.assign({}, state, {
+			loginstatus: true,
+			data: action.data,
+			changeuser: false,
+			isLogin: false,
+		});
+	},
+	[Login.CHANGEUSER]: (state, action) => {
+		return Object.assign({}, state, {
+			loginstatus: true,
+			data: action.data,
+			changeuser: true,
+			isLogin: false,
+		});
+	},
 }
+
+export default createReducers(initState, loginHandler);

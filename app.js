@@ -22,7 +22,7 @@ app.use(webpackHotMiddleware(compiler));
 app.set('views', './app/views');
 app.set('view engine', 'pug');
 
-require('./app/actions/BasicController')(app);
+require('./app/controllers/BasicController')(app);
 
 app.listen(3000, function () {
   console.log('Mobile Designer listening on port 3000!');

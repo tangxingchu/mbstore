@@ -1,21 +1,25 @@
 
+import createReducers from '../utils/createReducers'
+import {Extensions} from '../utils/constants'
+
 const initState = {
 	loading: null,
 	data: [],
 }
 
-export default (state = initState, action) => {
-	switch(action.type) {
-		case 'GETALLLIST':
-			return Object.assign({}, state, {
-				loading: false,
-				data: action.data,
-			  });
-			break;
-		case 'GETALLLIST_PENDING':
-			return Object.assign({}, state, {
-				loading: true,
-			  });
-		default: return state; break;
-	}
+const extensionHandler = {
+	[Extensions.GETALLLIST]: (state, action) => {
+		return Object.assign({}, state, {
+			loading: false,
+			data: action.data,
+		});
+	},
+	[Extensions.GETALLLIST_PENDING]: (state, action) => {
+		return Object.assign({}, state, {
+			loading: true,
+		});
+	},
 }
+
+
+export default createReducers(initState, extensionHandler);
