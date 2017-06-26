@@ -39,7 +39,7 @@ class Panel extends Component {
 	}
 
 	_filter = (v) => {
-		v = v.replace(/\s+/g, "");
+		v = v.trim();
 		let type = 1;
 		if(this.props.match.url.indexOf('/themes') > -1) {
 			type = 2;
