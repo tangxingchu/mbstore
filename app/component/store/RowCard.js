@@ -23,7 +23,7 @@ export default class RowCard extends Component {
 			<Col span={6} style={{padding: 5}}>
 				<Card style={{ width: '100%',cursor:'pointer' }} bodyStyle={{ padding: 0 }} onClick={()=>{this.showDetailModal(this.props.data.app_id)}}>
 					<div style={{textAlign:'center'}}>
-					  <img width="100%" height="200px" src={this.props.data.icon_200 ? `/public/files${this.props.data.icon_200}` : '/public/image/default-icon.png'} />
+					  <img width="200px" height="200px" src={this.props.data.icon_200 ? `/public/files${this.props.data.icon_200}` : '/public/image/default-icon.png'} />
 					</div>
 					<div style={{textAlign:'center'}}>
 					  <h3>{this.props.data.appname_en}-{this.props.data.appname_cn}</h3>
