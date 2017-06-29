@@ -19,7 +19,8 @@ import {
 } from 'react-router-dom'
 
 const logger = createLogger();
-const store = createStore(reducers, applyMiddleware(thunk, logger));
+//const store = createStore(reducers, applyMiddleware(thunk, logger));
+const store = createStore(reducers, applyMiddleware(thunk));
 
 export default class Container extends Component {
     
@@ -36,8 +37,8 @@ export default class Container extends Component {
 					<Col span={20}>
 						<Row>
 							<Col span={6}>
-								<Route path="/:id" render={({match, location}) => {
-									if(match.url.indexOf('/extensions') > -1 || match.url.indexOf('/themes') > -1) {
+								<Route path='/:id' render={({match, location}) => {
+									if(location.pathname.indexOf('/enterprises') > -1 || location.pathname.indexOf('/normal') > -1) {
 										return (<Panel match={match} location={location} condition></Panel>);
 									} else {
 										return (<Panel match={match} location={location}></Panel>);
@@ -45,9 +46,10 @@ export default class Container extends Component {
 								}}/>
 							</Col>
 							<Col span={18}>
-							  <Route path="/:id" component={Header}/>
-							  <Route path='/extensions' render={() => <Extensions type={1}/>}></Route>
-			                  <Route path='/themes' render={() => <Extensions type={2}/>}></Route>
+							  <Route path='/:id' component={Header}/>
+							  <Route exact path='/' render={() => <Redirect to="/enterprises"/>}/>
+							  <Route path='/enterprises' render={() => <Extensions type={1}/>}></Route>
+			                  <Route path='/normal' render={() => <Extensions type={2}/>}></Route>
 							  <Route path='/login' component={ Login }></Route>
 							  <Route path='/myapps' component={ Myapp }></Route>
 							</Col>

@@ -29,7 +29,7 @@ class Login extends Component {
 
 	render() {
 		if(this.props.login.isLogin) {
-			return (<Redirect to="/extensions"/>);
+			return (<Redirect to="/enterprises"/>);
 		}
 		const { getFieldDecorator } = this.props.form;
 		return (

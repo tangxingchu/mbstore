@@ -20,6 +20,14 @@ class Extensions extends Component {
 
 	componentDidMount() {
 		this.props.extActions.getAppList(this.props.type).catch(erro => {console.log(erro)});
+		/*fetch('http://172.253.40.251:8081/mb/recommend/queryRecommendByStatus?auth.sysid=3&"1"', {
+			method: 'GET',
+			headers: {'msg.callback': ''}
+		}).then(response => response.json()).then((data) => console.log(data));*/
+		/*
+				<div style={styles.carousel}>
+					<StoreCarousel/>					
+				</div>*/
 	}
 
 	_renderItem = () => {
@@ -29,12 +37,6 @@ class Extensions extends Component {
 	render() {
 		return(
 			<div>
-				
-				
-				
-				<div style={styles.carousel}>
-					<StoreCarousel/>					
-				</div>
 				
 				<div style={styles.title}>{this.props.type === 1 ? '企业类' : '普通用户类'}应用列表({this.props.extensions.data.length})&nbsp;&nbsp;{this.props.extensions.loading || this.props.appInfo.q_loading ? <Spin size='large'/> : ''}</div>
 				

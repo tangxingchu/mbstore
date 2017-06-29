@@ -18,7 +18,7 @@ class Myapp extends Component {
 	
 	componentDidMount() {
 		let token = window.localStorage.getItem('token');
-		this.props.appInfoActions.getMyAppInfo(token);
+		if(token) this.props.appInfoActions.getMyAppInfo(token).catch(error => console.log(error));
 	}
 		
 	showDetailModal = (appId) => {
@@ -81,11 +81,10 @@ class Myapp extends Component {
 		let {url} = this.props.match;
 		if(!this.props.login.isLogin) {
 			if(!this.props.login.changeuser) {
-				return (<Redirect to="/extensions"/>)
+				return (<Redirect to="/enterprises"/>)
 			}
 			return (<Redirect to="/login"/>)
 		}
-
 		return (
 			<div>
 				<div style={styles.title}><span style={styles.myapp}>我的应用({this.props.appInfo.q_data.length})&nbsp;&nbsp;{this.props.appInfo.q_loading ? <Spin size='large'/> : ''}</span><Link to={`${url}/newapp`}><Button type='primary'>添加新应用</Button></Link></div>
@@ -121,6 +120,21 @@ class VersionInfo extends Component {
 		this.state = {down: false};
 	}
 	
+	_delVersion(versionNo) {
+		let token = window.localStorage.getItem('token');
+		let versionAction = this.props.versionActions;
+		let appId = this.props.appId;
+		confirm({
+		title: '确定删除该版本吗?',
+		onOk() {
+			versionAction.deleteVersion(token, appId, versionNo);
+		},
+		onCancel() {
+		  
+		},
+	  });
+	}
+
 	render() {
 		let token = window.localStorage.getItem('token');
 		return (
@@ -131,7 +145,9 @@ class VersionInfo extends Component {
 				{this.props.version.v_loading[this.props.appId] ? <Spin size='small'/> : ''}
 				
 				{this.state.down && this.props.version.v_data[this.props.appId] ? this.props.version.v_data[this.props.appId].map((item, index) => {
-					return <div key={index} style={{ padding: '4px'}}><div style={{float: 'left'}}>版本号：{item.versionNo}</div><div style={{float: 'left'}}>描述：{item.desc}</div>
+					return <div key={index} style={{ padding: '4px'}}><div style={{float: 'left',color: 'red',cursor:'pointer',marginTop: '4px',marginRight: '2px'}} onClick={()=>{this._delVersion(item.versionNo)}}>
+							<Icon type="delete" /></div><div style={{float: 'left'}}>版本号：{item.status === 1 ? <Icon type="check" style={{color: 'green'}}/> : ''}{item.versionNo}</div>
+						<div style={{float: 'left', marginLeft: '10px'}}>描述：{item.desc}</div>
 						<div style={{clear: 'both'}}></div>
 						</div>
 				}) : ''}

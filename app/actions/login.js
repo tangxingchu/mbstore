@@ -12,12 +12,12 @@ const login = (username, password) => {
 				data = Object.assign({}, data, {username: username});
 				return dispatch({
 					type: Login.LOGINSUCESS,
-					data: data,
+					data,
 				});	
 			} else {
 				return dispatch({
 					type: Login.LOGINFAILED,
-					data: data,
+					data,
 				});
 			}
 			
@@ -46,7 +46,7 @@ const loginByToken = (token) => {
 		let data = Object.assign({}, {}, {username: window.localStorage.getItem("username")});
 		dispatch({
 			type: Login.LOGINSUCESS,
-			data: data,
+			data,
 		});	
 	}
 }

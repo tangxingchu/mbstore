@@ -31,6 +31,10 @@ const versionHandler = {
 		state.v_loading[action.data.appId] = false;
 		return Object.assign({}, state);
 	},
+	[Version.DELETEVERSION]: (state, action) => {
+		state.v_data[action.data.appId] = action.data.data;
+		return Object.assign({}, state);
+	},
 }
 
 export default createReducers(initState, versionHandler);

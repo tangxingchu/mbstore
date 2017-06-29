@@ -9,7 +9,7 @@ const createVersion = (versionInfo) => {
 		return channel.createVersion(versionInfo).then(data =>
 			dispatch({
 				type: Version.CREATEVERSION,
-				data: data,
+				data,
 			})
 		).catch(err => console.log(err))
 	}
@@ -17,26 +17,40 @@ const createVersion = (versionInfo) => {
 
 const queryVersions = (token, appId) => {
 	return (dispatch, getState) => {
-		dispatch({type: Version.QUERYVERSION_PENDING, data: {'appId': appId}});
+		dispatch({type: Version.QUERYVERSION_PENDING, data: {appId}});
 		if(getState().version.v_data[appId]) {
 			return dispatch({
 				type: Version.QUERYVERSION,
-				data: {'appId': appId, 'data' : getState().version.v_data[appId]},
+				data: {appId, 'data' : getState().version.v_data[appId]},
 			});
 		} else {
 			var channel = new Channel();
 			return channel.queryVersion(token, appId).then(data =>
 				dispatch({
 					type: Version.QUERYVERSION,
-					data: {'appId' : appId, 'data': data},
+					data: {appId, data},
 				})
 			)
 		}		
 	}
 }
 
+const deleteVersion = (token, appId, versionNo) => {
+	return (dispatch, getState) => {
+		var channel = new Channel();
+		return channel.deleteVersion(token, appId, versionNo).then(data => {
+			let q_data = getState().version.v_data[appId];
+			let new_q_data = q_data.filter(v => v.versionNo !== versionNo);
+			dispatch({
+				type: Version.DELETEVERSION,
+				data: {appId, data: new_q_data},
+			})
+		}).catch(err => console.log(err))
+	}
+}
 
 export default {
 	createVersion,
 	queryVersions,
+	deleteVersion,
 }

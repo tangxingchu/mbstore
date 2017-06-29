@@ -90,4 +90,12 @@ export default class Channel {
 		});
 	}
 
+	deleteVersion = (token, appId, versionNo) => {
+		return Zqmb.me().token(token).get("/mb/versions/delete", appId, versionNo).then(function(res) {
+			return res.text();
+		}).then(function(data) {
+			return data;
+		});
+	}
+
 }

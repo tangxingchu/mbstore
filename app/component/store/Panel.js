@@ -21,7 +21,7 @@ class Panel extends Component {
 			_pd = searchParams.get("_pd") ? searchParams.get("_pd") : 0;
 		}
 		this.state = {
-			active: this.props.match.url,
+			active: this.props.location.pathname,
 			raValue: _pd,
 		};
 		//console.log('Panel', this.props);
@@ -41,7 +41,7 @@ class Panel extends Component {
 	_filter = (v) => {
 		v = v.trim();
 		let type = 1;
-		if(this.props.match.url.indexOf('/themes') > -1) {
+		if(this.props.match.url.indexOf('/normal') > -1) {
 			type = 2;
 		}
 		if(v) {
@@ -52,11 +52,11 @@ class Panel extends Component {
 	}
 
     render () {
-		let {match} = this.props;
-		let url = match.url;
+		let {match, location} = this.props;
+		let url = location.pathname;
         return (
             <div style={styles.root}>
-            	<Link to="/extensions" style={styles.link}>
+            	<Link to="/enterprises" style={styles.link}>
             	<div style={{height: 40}}>
             		<img src="/public/image/cmschina.png" style={{width:30, height: 30, borderRadius: 15, marginTop: 5, marginRight: 5}} alt="招证应用市场"/>
             		<span style={{fontSize:16, position: 'relative', bottom: 10}}>招证应用市场</span>
@@ -68,18 +68,9 @@ class Panel extends Component {
 					}}}/>
             	</div>
 		
-				<Category to="/extensions" label="企业类" onClick={() => {this.setActive('/extensions')}}/>
+				<Category to="/enterprises" label="企业类" onClick={() => {this.setActive('/enterprises')}}/>
 				
-				<Category to="/themes" label="普通用户类" onClick={() => {this.setActive('/extensions')}}/>
-
-				<Route path={match.url} render={() => {
-					if(match.url.indexOf('/extensions') > -1 || match.url.indexOf('/themes') > -1) {
-						return null;
-					} else {
-						return null;
-					}
-					
-				}}/>
+				<Category to="/normal" label="普通用户类" onClick={() => {this.setActive('/normal')}}/>
 
 		{this.props.condition ? (
 					<Route render={({location}) => {
