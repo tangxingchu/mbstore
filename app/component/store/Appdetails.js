@@ -55,6 +55,7 @@ class AppDetails extends Component {
 								</div>
 								<div style={{float:'right', marginRight: '20px'}}>
 									<QRCode value={`cmsnet://oams.newone.com.cn/mapp/app/${this.props.appInfo.data.app_id}@${this.props.appInfo.data.version_no}/app/${this.props.appInfo.data.app_id}.App`}></QRCode>
+									<br/>当前版本：<label>{this.props.appInfo.data.version_no ? this.props.appInfo.data.version_no : '无'}</label>
 								</div>
 							</div>
 							<div style={{clear:'both', marginTop: '20px'}}><span style={{fontWeight:'bold'}}>描述:</span>{this.props.appInfo.data.a_desc}</div>

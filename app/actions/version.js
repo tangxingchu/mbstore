@@ -11,7 +11,7 @@ const createVersion = (versionInfo) => {
 				type: Version.CREATEVERSION,
 				data,
 			})
-		).catch(err => console.log(err))
+		)
 	}
 }
 
@@ -20,17 +20,25 @@ const queryVersions = (token, appId) => {
 		dispatch({type: Version.QUERYVERSION_PENDING, data: {appId}});
 		if(getState().version.v_data[appId]) {
 			return dispatch({
-				type: Version.QUERYVERSION,
+				type: Version.QUERYVERSION_CACHE,
 				data: {appId, 'data' : getState().version.v_data[appId]},
 			});
 		} else {
 			var channel = new Channel();
-			return channel.queryVersion(token, appId).then(data =>
-				dispatch({
+			return channel.queryVersion(token, appId).then(data => {
+				let rollback = false;
+				if(data && data.length > 0) {
+					data.forEach((item) => {
+						if(item.usingVersion === 1) {
+							rollback = true;
+						}
+					});
+				}
+				return dispatch({
 					type: Version.QUERYVERSION,
-					data: {appId, data},
+					data: {appId, data, rollback},
 				})
-			)
+			})
 		}		
 	}
 }
@@ -45,7 +53,27 @@ const deleteVersion = (token, appId, versionNo) => {
 				type: Version.DELETEVERSION,
 				data: {appId, data: new_q_data},
 			})
-		}).catch(err => console.log(err))
+		})
+	}
+}
+
+const rollbackVersion = (token, appId, versionId) => {
+	return (dispatch, getState) => {
+		var channel = new Channel();
+		return channel.rollbackVersion(token, appId, versionId).then(data => {
+			let q_data = getState().version.v_data[appId];
+			let new_q_data = q_data.map((item, index) => {
+				item.usingVersion = 0;
+				if(item.versionId == versionId) {
+					item.usingVersion = 1;
+				}
+				return item;
+			});
+			dispatch({
+				type: Version.DELETEVERSION,
+				data: {appId, data: new_q_data},
+			})
+		})
 	}
 }
 
@@ -53,4 +81,5 @@ export default {
 	createVersion,
 	queryVersions,
 	deleteVersion,
+	rollbackVersion,
 }

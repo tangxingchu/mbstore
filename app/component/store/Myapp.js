@@ -135,6 +135,21 @@ class VersionInfo extends Component {
 	  });
 	}
 
+	_rollbackVersion(versionId) {
+		let token = window.localStorage.getItem('token');
+		let versionAction = this.props.versionActions;
+		let appId = this.props.appId;
+		confirm({
+		title: '确定切换至该版本吗?',
+		onOk() {
+			versionAction.rollbackVersion(token, appId, versionId);
+		},
+		onCancel() {
+		  
+		},
+	  });
+	}
+
 	render() {
 		let token = window.localStorage.getItem('token');
 		return (
@@ -145,8 +160,12 @@ class VersionInfo extends Component {
 				{this.props.version.v_loading[this.props.appId] ? <Spin size='small'/> : ''}
 				
 				{this.state.down && this.props.version.v_data[this.props.appId] ? this.props.version.v_data[this.props.appId].map((item, index) => {
-					return <div key={index} style={{ padding: '4px'}}><div style={{float: 'left',color: 'red',cursor:'pointer',marginTop: '4px',marginRight: '2px'}} onClick={()=>{this._delVersion(item.versionNo)}}>
-							<Icon type="delete" /></div><div style={{float: 'left'}}>版本号：{item.status === 1 ? <Icon type="check" style={{color: 'green'}}/> : ''}{item.versionNo}</div>
+					return <div key={index} style={{ padding: '4px'}}>
+						{item.usingVersion === 0 ? <div style={{float: 'left',color: 'red',cursor:'pointer',marginTop: '4px',marginRight: '2px'}} title='删除' onClick={()=>{this._delVersion(item.versionNo)}}>
+							<Icon type="delete" /></div> : ''}
+						<div style={{float: 'left'}} >版本号：{item.usingVersion === 1 ? <Icon type="check" title='当前版本' style={{color: 'green'}}/> : ''}{item.versionNo}</div>
+						<div style={{float: 'left'}}>{(this.props.version.rollback[this.props.appId] && item.usingVersion === 0) ? <div style={{float: 'left',color: '#108ee9',cursor:'pointer',marginTop: '4px',marginRight: '2px'}} title='切换至该版本' onClick={()=>{this._rollbackVersion(item.versionId)}}>
+							<Icon type="rollback" /></div> : ''}</div>
 						<div style={{float: 'left', marginLeft: '10px'}}>描述：{item.desc}</div>
 						<div style={{clear: 'both'}}></div>
 						</div>
@@ -174,7 +193,7 @@ class NewVersionInfo extends Component {
 				let version = values['version'];
 				let desc = values['desc'];
 				let versionInfo = {token, appId, version, desc};
-				this.props.versionActions.createVersion(versionInfo).then((data) => { console.log(data);Modal.info({
+				this.props.versionActions.createVersion(versionInfo).then((data) => { Modal.info({
 					title: '提示',
 					content: (
 					  <div>
@@ -206,7 +225,7 @@ class NewVersionInfo extends Component {
 							  { required: true, pattern: /^\d+((\.\d+)+$){1,2}/, message: '请输入正确的版本号,比如:1.0.1' },
 							],
 						  })(
-						  <Input placeholder="版本号" maxLength='10'/>)}
+						  <Input placeholder="版本号" maxLength='5'/>)}
 						</FormItem>
 						<FormItem
 						  {...formItemLayout}
@@ -242,7 +261,6 @@ const WrappedNewVersionInfo = Form.create()(connect((state) => {
 
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 class ModifyForm extends React.Component {
   handleSubmit = (e) => {
@@ -265,7 +283,7 @@ class ModifyForm extends React.Component {
 			icon_200_path = values.upload200[values.upload200.length - 1].response ? values.upload200[values.upload200.length - 1].response.files['icon200'][0].path : '';
 		}
 		this.props.appInfoActions.updateAppInfo({token, appId: values['appId'], appnameEn: values['appnameEn'], appnameCn: values['appnameCn'], type: values['type']
-			, desc: values['desc'], icon_50, icon_100, icon_200, icon_50_path, icon_100_path, icon_200_path})
+			, sysid: values['sysid'], permit: values['permit'], desc: values['desc'], icon_50, icon_100, icon_200, icon_50_path, icon_100_path, icon_200_path})
 		.then(() => { Modal.info({
     title: '提示',
     content: (
@@ -316,17 +334,13 @@ class ModifyForm extends React.Component {
           label="中文名称"
         >{getFieldDecorator('appnameCn')(<Input disabled/>)}
         </FormItem>
-
+		
         <FormItem
           {...formItemLayout}
           label="应用类型"
           hasFeedback
         >
-          {getFieldDecorator('type', {
-            rules: [
-              { required: true, message: '请选择类型!' },
-            ],
-          })(
+          {getFieldDecorator('type')(
 			<Radio.Group>
               <Radio.Button value="1">企业类</Radio.Button>
               <Radio.Button value="2">普通用户类</Radio.Button>
@@ -334,6 +348,27 @@ class ModifyForm extends React.Component {
           )}
         </FormItem>
 
+		<FormItem
+          {...formItemLayout}
+          label="sysid"
+        >{getFieldDecorator('sysid', {
+            rules: [
+              { required: true, message: '请输入sysid!' },
+            ],
+          })(
+          <Input placeholder="sysid" maxLength='30'/>) }
+        </FormItem>
+
+		<FormItem
+          {...formItemLayout}
+          label="permit"
+        >{getFieldDecorator('permit', {
+            rules: [
+              { required: true, message: '请输入permit!' },
+            ],
+          })(
+          <Input placeholder="permit" maxLength='40'/>) }
+        </FormItem>
 
         <FormItem
           {...formItemLayout}
@@ -423,7 +458,7 @@ const WrappedForm = connect((state) => {
 	return {
 		appInfoActions: bindActionCreators(appInfoActions, dispatch),
 	}
-})(createForm({
+})(Form.create({
   mapPropsToFields(props) {
     //console.log('mapPropsToFields', props);
 	let upload50_v = '', upload100_v = '', upload200_v = '';
@@ -447,6 +482,8 @@ const WrappedForm = connect((state) => {
 	  appnameEn: {value: props.appInfo.data.appname_en},
 	  appnameCn: {value: props.appInfo.data.appname_cn},
 	  type: {value: props.appInfo.data.type + ''},
+	  sysid_u: {value: props.appInfo.data.sysid},
+	  permit_u: {value: props.appInfo.data.permit},
 	  desc: {value: props.appInfo.data.a_desc},
       upload50: {value: upload50_v},
 	  upload100: {value: upload100_v},
@@ -480,7 +517,7 @@ class AddForm extends React.Component {
 			icon_200_path = values.upload200[values.upload200.length - 1].response ? values.upload200[values.upload200.length - 1].response.files['icon200'][0].path : '';
 		}
 		this.props.appInfoActions.addAppInfo({token, appnameEn: values['appnameEn'], appnameCn: values['appnameCn'], type: values['type']
-			, desc: values['desc'], icon_50, icon_100, icon_200, icon_50_path, icon_100_path, icon_200_path})
+			, sysid: values['sysid'], permit: values['permit'], desc: values['desc'], icon_50, icon_100, icon_200, icon_50_path, icon_100_path, icon_200_path})
 		.then(() => { Modal.info({
     title: '提示',
     content: (
@@ -548,7 +585,28 @@ class AddForm extends React.Component {
             </Radio.Group>
           )}
         </FormItem>
+		
+		<FormItem
+          {...formItemLayout}
+          label="sysid"
+        >{getFieldDecorator('sysid', {
+            rules: [
+              { required: true, message: '请输入sysid!' },
+            ],
+          })(
+          <Input placeholder="sysid" maxLength='30'/>) }
+        </FormItem>
 
+		<FormItem
+          {...formItemLayout}
+          label="permit"
+        >{getFieldDecorator('permit', {
+            rules: [
+              { required: true, message: '请输入permit!' },
+            ],
+          })(
+          <Input placeholder="permit" maxLength='40'/>) }
+        </FormItem>
 
         <FormItem
           {...formItemLayout}

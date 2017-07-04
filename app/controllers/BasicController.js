@@ -17,38 +17,11 @@ module.exports = (app) => {
 	app.post('/fileUpload',  function(req, res){
 		var form = new multiparty.Form({uploadDir: ROOT_PATH + '/public/temp/'});
 		form.parse(req, function(err, fields, files) {
-	      //var filesTmp = JSON.stringify(files, null, 2);
+			//var filesTmp = JSON.stringify(files, null, 2);
 			//console.log('fields', fields);
-	      if(err){
-	        console.log('parse error: ' + err);
-	      } else {
-			let pro;
-			for(var p in files) {
-				pro = p;
-			}
-	        var inputFile = files[pro][0];
-	        var uploadedPath = inputFile.path;
-	        var arr = uploadedPath.split("\\");
-	        var upFileName = arr[arr.length-1];
-	        var originalFilename = inputFile.originalFilename;
-	        //var dstPath = ROOT_PATH + '/public/files/' + originalFilename;
-			/*
-	        //重命名为真实文件名
-	        fs.rename(uploadedPath, dstPath, function(err) {
-	          if(err){
-	            console.log('rename error: ' + err);
-	          } else {
-	            console.log('rename ok');
-	          }
-	        });*/
-			/*
-	        
-
-		    
-	      
-	      res.send({success:false});
-	   });*/
-		  
+			if(err){
+				console.log('parse error: ' + err);
+			} else {		  
 				res.writeHead(200, {'content-type': 'application/json;charset=utf-8'});
 				res.end(JSON.stringify({fields: fields, files: files}));
 			}
@@ -99,6 +72,8 @@ module.exports = (app) => {
 			 }
 			 return ret;
 		}
+		
+		
 
 		var authSysid = "1001";
 		var authPermit = "nGdeacZmW3E1XM9Wi5alwcMUCKeVDZ";
@@ -107,7 +82,6 @@ module.exports = (app) => {
 		var headerConfig = {'auth.sysid':authSysid,'auth.permit':authPermit,'auth.token':'','msg.sequence':msgSequence,'msg.callback':msgCallback};
 		
 		var url = "http://172.253.40.251:8081/mb/file/saveImage";
-		console.log('icon_50_path', icon_50_path);
 		if(icon_50 && icon_50_path) {
 			console.log(icon_50);
 			var dstPath_50 = dstPath + icon_50;
@@ -137,7 +111,11 @@ module.exports = (app) => {
 
 			var fileContent_100 = fs.readFileSync(dstPath_100);
 			fileContent_100 = new Buffer(fileContent_100).toString('base64');
-
+			/*
+			fetch('http://172.253.40.251:8081/mb/file/saveImage', 
+				{method: 'POST',headers: {'msg.callback': ''}, body: "'/" + appnameEn + "/" + icon_100+"','"+fileContent_100+"'"}
+			).then(response => console.log(response.text));
+			*/
 			request.post(url)
 			.set(headerConfig)
 			.send("'/" + appnameEn + "/" + icon_100+"','"+fileContent_100+"'")

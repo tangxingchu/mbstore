@@ -19,18 +19,18 @@ export default class Channel {
 		});
 	}
 
-	addAppInfo = ({token, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200}) => {
+	addAppInfo = ({token, appnameEn, appnameCn, type, sysid, permit, desc, icon_50, icon_100, icon_200}) => {
 		//console.log(appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200);
-		return Zqmb.me().token(token).get("/mb/app/create", appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200).then(function(res){
+		return Zqmb.me().token(token).get("/mb/app/create", appnameEn, appnameCn, type, sysid, permit, desc, icon_50, icon_100, icon_200).then(function(res){
 			return res.json();
 		}).then(function(data) {
 			return data;
 		});
 	}
 	
-	updateAppInfo = ({token, appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200}) => {
+	updateAppInfo = ({token, appId, appnameEn, appnameCn, type, sysid, permit, desc, icon_50, icon_100, icon_200}) => {
 		//console.log(appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200);
-		return Zqmb.me().token(token).get("/mb/app/update", appId, appnameEn, appnameCn, type, desc, icon_50, icon_100, icon_200).then(function(res){
+		return Zqmb.me().token(token).get("/mb/app/update", appId, appnameEn, appnameCn, type, sysid, permit, desc, icon_50, icon_100, icon_200).then(function(res){
 			return res;
 		});
 	}
@@ -92,6 +92,14 @@ export default class Channel {
 
 	deleteVersion = (token, appId, versionNo) => {
 		return Zqmb.me().token(token).get("/mb/versions/delete", appId, versionNo).then(function(res) {
+			return res.text();
+		}).then(function(data) {
+			return data;
+		});
+	}
+
+	rollbackVersion  = (token, appId, versionId) => {
+		return Zqmb.me().token(token).get("/mb/versions/rollbackVersion", appId, versionId).then(function(res) {
 			return res.text();
 		}).then(function(data) {
 			return data;
