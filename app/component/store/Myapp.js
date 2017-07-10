@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { createForm } from 'rc-form';
 import {Button, Modal,Form, Select, InputNumber, Switch, Radio,
-  Slider, Upload, Icon,Input,Spin,Tabs } from 'antd';
+  Slider, Upload, Icon,Input,Spin,Tabs,message} from 'antd';
 import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Route, Link, Redirect} from 'react-router-dom';
@@ -13,7 +13,13 @@ class Myapp extends Component {
 	
 	constructor(props) {
         super(props);
-		this.state = {visible: false};
+		this.state = {
+			visible: false,
+			notifVisible: false,
+			notifContent: '',
+			notifAppId: '',
+			notifVersionNo: ''
+		};
 	}
 	
 	componentDidMount() {
@@ -42,6 +48,20 @@ class Myapp extends Component {
 		},
 	  });
 	}
+
+	showNotification = (appId, versionNo) => {
+		
+
+		let token = window.localStorage.getItem('token');
+		this.props.appInfoActions.getAppInfoById(token, appId).then(()=>{
+			this.setState({
+				notifVisible: true,
+				notifAppId: appId,
+				notifVersionNo: versionNo
+			})
+		}).catch((err) => console.log(err));	
+
+	}
 	
 	_renderItem = () => {
 		let {url} = this.props.match;
@@ -55,6 +75,7 @@ class Myapp extends Component {
 						<div style={{float: 'left', marginRight: '10px'}}>类型: <span style={{fontWeight: 'bold'}}>{data.type === 1 ? '企业类' : '普通用户类'}</span></div>
 						<div style={{float: 'left', marginRight: '10px'}}>英文名称: <span style={{fontWeight: 'bold'}}>{data.appname_en}</span></div>
 						<div style={{float: 'left', marginRight: '10px'}}>中文名称: <span style={{fontWeight: 'bold'}}>{data.appname_cn}</span></div>
+						<div style={{clear: 'both'}}></div>
 						<div style={{float: 'left', marginRight: '10px'}}>创建时间: <span>{data.create_time}</span></div>
 						<div style={{clear: 'both'}}></div>
 						<div style={{clear: 'both'}}>描述：{data.a_desc}</div>
@@ -67,6 +88,9 @@ class Myapp extends Component {
 					</div>
 					<div style={{float:'right', marginRight: '10px'}}>
 						<div><Link to={`${url}/modifyapp/${data.app_id}`}><Button style={{width: '100px'}}>修改</Button></Link></div>
+					</div>
+					<div style={{float:'right', marginRight: '10px'}}>
+						<div><Button onClick={this.showNotification.bind(this, data.app_id, data.version_no)} style={{width: '100px'}}>通知推送</Button></div>
 					</div>
 					<div style={{clear: 'both'}}></div>
 					<VersionInfo versionActions={this.props.versionActions} version={this.props.version} appId={data.app_id}/>
@@ -104,6 +128,64 @@ class Myapp extends Component {
 				<AppDetails visible={this.state.visible} cb={()=>{this.setState({
 					  visible: false,
 					})}}/>
+
+				<Modal 
+					visible={this.state.notifVisible} 
+					title="发送推送消息" 
+					onOk={(()=>{
+						let content = this.state.notifContent;
+						let appId = this.state.notifAppId;
+						let versionNo = this.state.notifVersionNo;
+
+						if (!content || !appId || !versionNo) {
+							message.error('推送通知失败');
+							
+							this.setState({
+								notifVisible: false, 
+								notifContent: ''
+							});
+
+							return;
+						}
+
+						fetch('/pushNotification', 
+							{
+								method: "POST",
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded'
+								},
+								body: `content=${encodeURI(content)}&app_id=${appId}&version_no=${versionNo}`
+							}
+						)
+						.then(r => r.json())
+						.then(r => {
+							if (r.success) {
+
+								message.success('推送成功');
+
+							} else {
+								
+								message.error('推送通知失败');
+
+							}
+
+							this.setState({
+								notifVisible: false, 
+								notifContent: ''
+							});
+						})
+						.catch(e => {
+							message.error('推送通知失败')
+						})
+
+
+					}).bind(this)} 
+					onCancel={(()=>{this.setState({notifVisible: false, notifContent: ''})}).bind(this)}
+				>
+					<Input addonBefore="推送内容" value={this.state.notifContent} onChange={((e)=>{this.setState({notifContent: e.target.value})}).bind(this)} style={{width: 399}}>
+						
+					</Input>
+				</Modal>
 				
 			</div>
 		)
@@ -201,6 +283,9 @@ class NewVersionInfo extends Component {
 					  </div>
 					),
 					onOk() {},
+				  });}).catch(e => {Modal.error({
+					title: '出错了',
+					content: e.toString(),
 				  });});
 			}
 		});
@@ -482,8 +567,8 @@ const WrappedForm = connect((state) => {
 	  appnameEn: {value: props.appInfo.data.appname_en},
 	  appnameCn: {value: props.appInfo.data.appname_cn},
 	  type: {value: props.appInfo.data.type + ''},
-	  sysid_u: {value: props.appInfo.data.sysid},
-	  permit_u: {value: props.appInfo.data.permit},
+	  sysid: {value: props.appInfo.data.sysid},
+	  permit: {value: props.appInfo.data.permit},
 	  desc: {value: props.appInfo.data.a_desc},
       upload50: {value: upload50_v},
 	  upload100: {value: upload100_v},

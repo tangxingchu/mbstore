@@ -28,6 +28,33 @@ module.exports = (app) => {
 		});
 	});
 
+	app.post('/pushNotification', function (req, res) {
+		var content = decodeURI(req.body.content);
+		var appId = req.body.app_id;
+		var versionNo = req.body.version_no;
+
+		var JPush = require('jpush-sdk');
+
+		var client = JPush.buildClient('ac09c06fad8f2d580effe858', '9e142ed6101db36ec383587b');
+
+		client
+		.push()
+		.setPlatform(JPush.ALL)
+    	.setAudience(JPush.ALL)
+    	.setNotification(JPush.ios(content, 'default', 0, false, {app_id: appId, version_no: versionNo}),  JPush.android(content, '招证移动平台', 1, {app_id: appId, version_no: versionNo}))
+    	.send(function(err, result) {
+        	if (err) {
+            	res.send({
+	                success: false
+	            });
+        	} else {
+            	res.send({
+	                success: true
+	            });
+        	}
+    	});
+	})
+
 
 	app.post('/saveImages', function(req, res) {
 		var token = req.body.token;

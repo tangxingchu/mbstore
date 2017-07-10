@@ -19,7 +19,7 @@ const filter = (v) => {
 	return (dispatch, getState) => {
 		dispatch({type: Extensions.GETALLLIST_PENDING});
 		let data = getState().extensions.data.filter(item => item.appname_en.indexOf(v) > -1 || item.appname_cn.indexOf(v) > -1);
-		dispatch({type: Extensions.GETALLLIST, data});
+		return Promise.resolve(dispatch({type: Extensions.GETALLLIST, data}));
 	}
 }
 

@@ -4,6 +4,7 @@ var ROOT_PATH = path.resolve(__dirname, '..');
 
 
 module.exports = {
+	devtool: "source-map",
     entry: ROOT_PATH + '/app/entry/store.js',
     resolve: {
         extensions: ['.js', '.jsx']

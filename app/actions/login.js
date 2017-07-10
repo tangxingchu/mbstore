@@ -29,7 +29,7 @@ const logout = () => {
 	return (dispatch, getState) => {
 		window.localStorage.removeItem("token");
 		window.localStorage.removeItem("username");
-		dispatch({type: Login.LOGOUT});
+		return Promise.resolve(dispatch({type: Login.LOGOUT}));
 	}
 }
 
@@ -37,17 +37,17 @@ const changeuser = () => {
 	return (dispatch, getState) => {
 		window.localStorage.removeItem("token");
 		window.localStorage.removeItem("username");
-		dispatch({type: Login.CHANGEUSER});
+		return Promise.resolve(dispatch({type: Login.CHANGEUSER}));
 	}
 }
 
 const loginByToken = (token) => {
 	return (dispatch, getState) => {
 		let data = Object.assign({}, {}, {username: window.localStorage.getItem("username")});
-		dispatch({
+		return Promise.resolve(dispatch({
 			type: Login.LOGINSUCESS,
 			data,
-		});	
+		}));	
 	}
 }
 

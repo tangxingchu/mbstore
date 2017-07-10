@@ -23,6 +23,11 @@ const versionHandler = {
 			data: action.data,
 		});
 	},
+	[Version.CREATEVERSION_ERROR]: (state, action) => {
+		return Object.assign({}, state, {
+			loading: false,
+		});
+	},
 	[Version.QUERYVERSION_PENDING]: (state, action) => {
 		state.v_loading[action.data.appId] = true;
 		return Object.assign({}, state);

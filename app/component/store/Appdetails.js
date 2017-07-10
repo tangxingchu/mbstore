@@ -31,7 +31,7 @@ class AppDetails extends Component {
 	}
 
 	render() {
-		
+		let {app_id, version_no} = this.props.appInfo.data;
 		return(
 			<Modal
 				  title="应用详情"
@@ -47,18 +47,17 @@ class AppDetails extends Component {
 									<div><img src={this.props.appInfo.data.icon_200 ? `/public/files${this.props.appInfo.data.icon_200}` : '/public/image/default-icon.png'} style={{width:'200px',height:'200px'}}/></div>
 								</div>
 								<div style={{float:'left', marginLeft: '20px'}}>
-									<div><div style={{fontWeight:'bold'}}>ID:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.app_id}</div></div>					
-									<div><div style={{fontWeight:'bold'}}>类型:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.type === 1 ? '企业类' : '普通用户类'}</div></div>
-									<div><div style={{fontWeight:'bold'}}>英文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appname_en}</div></div>
 					                <div><div style={{fontWeight:'bold'}}>中文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appname_cn}</div></div>
 					                <div><div style={{fontWeight:'bold'}}>创建时间:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.create_time}</div></div>
+					                <div><div style={{fontWeight:'bold'}}>描述:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.a_desc}</div></div>
 								</div>
+								{this.props.appInfo.data.version_no ?
 								<div style={{float:'right', marginRight: '20px'}}>
-									<QRCode value={`cmsnet://oams.newone.com.cn/mapp/app/${this.props.appInfo.data.app_id}@${this.props.appInfo.data.version_no}/app/${this.props.appInfo.data.app_id}.App`}></QRCode>
-									<br/>当前版本：<label>{this.props.appInfo.data.version_no ? this.props.appInfo.data.version_no : '无'}</label>
+									<QRCode value={`cmsnet://oams.newone.com.cn/mb/appfile/${app_id}@${version_no}/app/${app_id}.App`}></QRCode>
+									<br/>当前版本：<label>{this.props.appInfo.data.version_no}</label>
 								</div>
+								: ''}
 							</div>
-							<div style={{clear:'both', marginTop: '20px'}}><span style={{fontWeight:'bold'}}>描述:</span>{this.props.appInfo.data.a_desc}</div>
 							</div>
 						</TabPane>
 					</Tabs>
