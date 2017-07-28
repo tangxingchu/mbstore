@@ -85,9 +85,9 @@ class Panel extends Component {
 							</div>
 							<div style={styles.radios}>
 								<Link to={`${url}?_pd=1d`} style={styles.link}><label style={this.state.raValue === '1d' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('1d')}}>一天内</label></Link><br/>
-								<Link to={`${url}?_pd=1w`} style={styles.link}><label style={this.state.raValue === '1w' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('1w')}}>一周前</label></Link><br/>
-								<Link to={`${url}?_pd=1m`} style={styles.link}><label style={this.state.raValue === '1m' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('1m')}}>一个月前</label></Link><br/>
-								<Link to={`${url}?_pd=3m`} style={styles.link}><label style={this.state.raValue === '3m' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('3m')}}>三个月前</label></Link><br/>
+								<Link to={`${url}?_pd=1w`} style={styles.link}><label style={this.state.raValue === '1w' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('1w')}}>一周内</label></Link><br/>
+								<Link to={`${url}?_pd=1m`} style={styles.link}><label style={this.state.raValue === '1m' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('1m')}}>一个月内</label></Link><br/>
+								<Link to={`${url}?_pd=3m`} style={styles.link}><label style={this.state.raValue === '3m' ? styles.condition_selection : styles.condition} onClick={() => {this.onChange('3m')}}>三个月内</label></Link><br/>
 							</div>
 						</div>
 					)}}/>

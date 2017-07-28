@@ -35,13 +35,14 @@ module.exports = (app) => {
 
 		var JPush = require('jpush-sdk');
 
-		var client = JPush.buildClient('ac09c06fad8f2d580effe858', '9e142ed6101db36ec383587b');
+		var client = JPush.buildClient('d532d455a1be71221a298cb5', '187dbec3a882e2ff2320500a');
 
 		client
 		.push()
-		.setPlatform(JPush.ALL)
+		.setPlatform('android')
     	.setAudience(JPush.ALL)
-    	.setNotification(JPush.ios(content, 'default', 0, false, {app_id: appId, version_no: versionNo}),  JPush.android(content, '招证移动平台', 1, {app_id: appId, version_no: versionNo}))
+    	// .setNotification(JPush.ios(content, 'default', 0, false, {app_id: appId, version_no: versionNo}),  JPush.android(content, '招证移动平台', 1, {app_id: appId, version_no: versionNo}))
+    	.setNotification(JPush.android(content, '招证移动平台', 1, {app_id: appId, version_no: versionNo}))
     	.send(function(err, result) {
         	if (err) {
             	res.send({

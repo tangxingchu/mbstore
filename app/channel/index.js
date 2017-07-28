@@ -106,4 +106,12 @@ export default class Channel {
 		});
 	}
 
+	updateRecommend  = (token, appId, status) => {
+		return Zqmb.me().token(token).get("/mb/recommend/updateRecommend", appId, status).then(function(res) {
+			return res.text();
+		}).then(function(data) {
+			return data;
+		});
+	}
+
 }

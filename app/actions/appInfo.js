@@ -16,6 +16,7 @@ const addAppInfo = (appInfo) => {
 		if(appInfo.icon_100) appInfo.icon_100 = '/' + appInfo.appnameEn + '/' + appInfo.icon_100;
 		if(appInfo.icon_200) appInfo.icon_200 = '/' + appInfo.appnameEn + '/' + appInfo.icon_200;
 		return channel.addAppInfo(appInfo).then(data => {
+			data.a_desc = data.desc;data.appname_en = data.appnameEn;data.appname_cn = data.appnameCn;data.app_id = data.appId;
 			return dispatch({
 				type: AppInfo.ADDAPPINFO,
 				data: data,
@@ -89,6 +90,20 @@ const delAppInfoById = (token, appId) => {
 	}
 }
 
+const updateRecommend = (token, appId, status) => {
+	return (dispatch, getState) => {
+		var channel = new Channel();
+		dispatch({type: AppInfo.UPDATERECOMMEND_PENDING, data: appId});
+		return channel.updateRecommend(token, appId, status).then(data => {
+			return dispatch({
+				type: AppInfo.UPDATERECOMMEND,
+				data: appId,
+			});
+		})
+	}
+}
+
+
 const showCVModal = (appId) => {
 	return (dispatch, getState) => {
 		dispatch({type: AppInfo.SHOW_CVModal, data: {appId}});
@@ -107,6 +122,7 @@ export default {
 	updateAppInfo,
 	getAppInfoById,
 	delAppInfoById,
+	updateRecommend,
 	showCVModal,
 	showDetail,
 }

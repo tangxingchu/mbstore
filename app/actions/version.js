@@ -49,7 +49,7 @@ const deleteVersion = (token, appId, versionNo) => {
 		return channel.deleteVersion(token, appId, versionNo).then(data => {
 			let q_data = getState().version.v_data[appId];
 			let new_q_data = q_data.filter(v => v.versionNo !== versionNo);
-			dispatch({
+			return dispatch({
 				type: Version.DELETEVERSION,
 				data: {appId, data: new_q_data},
 			})
@@ -69,7 +69,7 @@ const rollbackVersion = (token, appId, versionId) => {
 				}
 				return item;
 			});
-			dispatch({
+			return dispatch({
 				type: Version.DELETEVERSION,
 				data: {appId, data: new_q_data},
 			})

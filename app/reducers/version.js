@@ -17,7 +17,7 @@ const versionHandler = {
 		});
 	},
 	[Version.CREATEVERSION]: (state, action) => {
-		state.v_data[action.data.appId] ? state.v_data[action.data.appId].push(action.data) : '';
+		state.v_data[action.data.appId] ? state.v_data[action.data.appId].unshift(action.data) : '';
 		return Object.assign({}, state, {
 			loading: false,
 			data: action.data,

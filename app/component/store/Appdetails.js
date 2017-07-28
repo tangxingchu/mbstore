@@ -47,6 +47,7 @@ class AppDetails extends Component {
 									<div><img src={this.props.appInfo.data.icon_200 ? `/public/files${this.props.appInfo.data.icon_200}` : '/public/image/default-icon.png'} style={{width:'200px',height:'200px'}}/></div>
 								</div>
 								<div style={{float:'left', marginLeft: '20px'}}>
+									{ this.props.showAppId ? <div><div style={{fontWeight:'bold'}}>appId:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.app_id}</div></div>  : ''}
 					                <div><div style={{fontWeight:'bold'}}>中文名称:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.appname_cn}</div></div>
 					                <div><div style={{fontWeight:'bold'}}>创建时间:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.create_time}</div></div>
 					                <div><div style={{fontWeight:'bold'}}>描述:</div><div style={{paddingLeft:'10px'}}>{this.props.appInfo.data.a_desc}</div></div>

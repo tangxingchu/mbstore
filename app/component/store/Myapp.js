@@ -62,12 +62,22 @@ class Myapp extends Component {
 		}).catch((err) => console.log(err));	
 
 	}
+
+	updateRecommend = (appId, status) => {
+		let token = window.localStorage.getItem('token');
+		if(status === 1) {
+			status = 0;
+		} else {
+			status = 1;
+		}
+		this.props.appInfoActions.updateRecommend(token, appId, status).catch((err) => console.log(err));	
+	}
 	
 	_renderItem = () => {
 		let {url} = this.props.match;
 		if(this.props.appInfo.q_data) {
 			return (<div style={{padding: '10px 0px 10px', fontSize: '14px'}}>{this.props.appInfo.q_data.map((data, index) => {
-				return (<div style={{border:'1px solid #ccc', padding: '10px', marginTop: '4px'}} key={index}>
+				return (<div style={(data.recommend === 1) ? styles.card_active : styles.card} key={index}>
 					<div style={{float: 'left', marginRight: '4px'}}>
 						<img style={{width:'100px', height:'100px', cursor:'pointer'}} onClick={()=>{this.showDetailModal(data.app_id)}} src={data.icon_100 ? '/public/files' + data.icon_100 : '/public/image/default-icon.png'} />
 					</div>
@@ -82,16 +92,16 @@ class Myapp extends Component {
 					</div>
 					<div style={{float:'right'}}>
 						<div><Button type='primary' style={{width: '100px'}} onClick={() => {this.props.appInfoActions.showCVModal(data.app_id)}}>创建新版本</Button></div>
-					</div>	
-					<div style={{float:'right', marginRight: '10px'}}>
-						<div><Button type='danger' style={{width: '100px'}} onClick={() => {this.showConfirm((token) => {this.props.appInfoActions.delAppInfoById(token, data.app_id)})}}>删除</Button></div>
 					</div>
 					<div style={{float:'right', marginRight: '10px'}}>
-						<div><Link to={`${url}/modifyapp/${data.app_id}`}><Button style={{width: '100px'}}>修改</Button></Link></div>
+						<div ><Link to={`${url}/modifyapp/${data.app_id}`}><Button style={{width: '100px'}}>修改</Button></Link></div>
+						<div style={{marginTop: '10px'}}><Button type='danger' style={{width: '100px'}} onClick={() => {this.showConfirm((token) => {this.props.appInfoActions.delAppInfoById(token, data.app_id)})}}>删除</Button></div>
 					</div>
 					<div style={{float:'right', marginRight: '10px'}}>
-						<div><Button onClick={this.showNotification.bind(this, data.app_id, data.version_no)} style={{width: '100px'}}>通知推送</Button></div>
+						<div><Button loading={this.props.appInfo.u_loading[data.app_id]} onClick={() => {this.updateRecommend(data.app_id, data.recommend)}} style={{width: '100px'}}>{data.recommend === 1 ? '取消推荐' : '设置为推荐'}</Button></div>
+						<div style={{marginTop: '10px'}}><Button onClick={this.showNotification.bind(this, data.app_id, data.version_no)} style={{width: '100px'}}>通知推送</Button></div>
 					</div>
+					
 					<div style={{clear: 'both'}}></div>
 					<VersionInfo versionActions={this.props.versionActions} version={this.props.version} appId={data.app_id}/>
 					<WrappedNewVersionInfo appId={data.app_id} />
@@ -125,7 +135,7 @@ class Myapp extends Component {
 					<WrappedForm url={url} modify appId={match.params.id}/>)}
 				}/>
 				
-				<AppDetails visible={this.state.visible} cb={()=>{this.setState({
+				<AppDetails visible={this.state.visible} showAppId cb={()=>{this.setState({
 					  visible: false,
 					})}}/>
 
@@ -275,11 +285,11 @@ class NewVersionInfo extends Component {
 				let version = values['version'];
 				let desc = values['desc'];
 				let versionInfo = {token, appId, version, desc};
-				this.props.versionActions.createVersion(versionInfo).then((data) => { Modal.info({
+				this.props.versionActions.createVersion(versionInfo).then((data) => { Modal.success({
 					title: '提示',
 					content: (
 					  <div>
-						保存成功！Code: {this.props.version.data.code}
+						保存成功！发布应用授权码: {this.props.version.data.code}
 					  </div>
 					),
 					onOk() {},
@@ -369,7 +379,7 @@ class ModifyForm extends React.Component {
 		}
 		this.props.appInfoActions.updateAppInfo({token, appId: values['appId'], appnameEn: values['appnameEn'], appnameCn: values['appnameCn'], type: values['type']
 			, sysid: values['sysid'], permit: values['permit'], desc: values['desc'], icon_50, icon_100, icon_200, icon_50_path, icon_100_path, icon_200_path})
-		.then(() => { Modal.info({
+		.then(() => { Modal.success({
     title: '提示',
     content: (
       <div>
@@ -603,7 +613,7 @@ class AddForm extends React.Component {
 		}
 		this.props.appInfoActions.addAppInfo({token, appnameEn: values['appnameEn'], appnameCn: values['appnameCn'], type: values['type']
 			, sysid: values['sysid'], permit: values['permit'], desc: values['desc'], icon_50, icon_100, icon_200, icon_50_path, icon_100_path, icon_200_path})
-		.then(() => { Modal.info({
+		.then(() => { Modal.success({
     title: '提示',
     content: (
       <div>
@@ -795,6 +805,17 @@ const styles = {
 	},
 	myapp: {
 		marginRight:'10px',
+	},
+	card_active: {
+		border:'1px solid #ccc',
+		boxShadow: '2px 2px 4px #ccc',
+		padding: '10px',
+		marginTop: '4px',
+	},
+	card: {
+		border:'1px solid #ccc',
+		padding: '10px',
+		marginTop: '4px',
 	}
 }
 
