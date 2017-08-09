@@ -41,8 +41,8 @@ module.exports = (app) => {
 		.push()
 		.setPlatform('android')
     	.setAudience(JPush.ALL)
-    	// .setNotification(JPush.ios(content, 'default', 0, false, {app_id: appId, version_no: versionNo}),  JPush.android(content, '招证移动平台', 1, {app_id: appId, version_no: versionNo}))
-    	.setNotification(JPush.android(content, '招证移动平台', 1, {app_id: appId, version_no: versionNo}))
+    	// .setNotification(JPush.ios(content, 'default', 0, false, {app_id: appId, version_no: versionNo}),  JPush.android(content, '移动平台', 1, {app_id: appId, version_no: versionNo}))
+    	.setNotification(JPush.android(content, '移动平台', 1, {app_id: appId, version_no: versionNo}))
     	.send(function(err, result) {
         	if (err) {
             	res.send({
