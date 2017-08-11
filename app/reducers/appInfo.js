@@ -14,7 +14,7 @@ const initState = {
 
 const appInfoHandler = {
 	[AppInfo.ADDAPPINFO]: (state, action) => {
-		state.q_data.push(action.data);
+		state.q_data.unshift(action.data);
 		return Object.assign({}, state, {
 			loading: false,
 			data: action.data,
