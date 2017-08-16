@@ -3,7 +3,6 @@ import Zqmb from 'zqmb';
 Zqmb.orgid = "1001";
 Zqmb.permit = "nGdeacZmW3E1XM9Wi5alwcMUCKeVDZ";
 Zqmb.timeout = 60000;
-Zqmb.host = "http://172.253.40.251:8081";
 
 export default class Channel {
 	
